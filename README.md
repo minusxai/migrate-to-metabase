@@ -13,12 +13,6 @@ Migrate queries from various BI tools to Metabase. Once on Metabase, [MinusX](ht
 - 🚧 Visualizations (planned)
 
 
-## Usage
-
-```bash
-python main.py -s redash -f queries.json -d DATABASE_ID -c COLLECTION_ID
-```
-
 ## Setup
 
 Create `.env`:
@@ -26,6 +20,14 @@ Create `.env`:
 METABASE_API_KEY=your_api_key
 METABASE_URL=https://your-metabase.com
 ```
+
+## Usage
+
+```bash
+# run with uv
+uv run main.py -s redash -f queries.json -d DATABASE_ID -c COLLECTION_ID
+```
+
 
 ## Adding New Tools
 
