@@ -1,16 +1,18 @@
 import argparse
 import json
 from dotenv import load_dotenv
-from utils import BiTool, make_api_request
+from utils import make_api_request
+from migrations.base import BiTool
+from tqdm import tqdm
 
 load_dotenv()
 
 
 def get_migration_module(bi_tool: BiTool):
-    """Import and return the appropriate migration module."""
+    """Import and return the appropriate migration class."""
     if bi_tool == BiTool.REDASH:
-        import migrations.redash as redash
-        return redash
+        from migrations.redash import RedashMigration
+        return RedashMigration
     elif bi_tool == BiTool.LOOKER:
         raise NotImplementedError("Looker migration not implemented yet")
     elif bi_tool == BiTool.TABLEAU:
@@ -59,17 +61,16 @@ async def main():
         queries_data = json.load(f)
     
     # Get migration module
-    migration_module = get_migration_module(source_tool)
+    migration_module = get_migration_module(source_tool)()
     
     # Process queries
-    for query_data in queries_data:
+    for query_data in tqdm(queries_data):
         card_config = migration_module.get_card_from_query(query_data, args.db_id, args.collection_id)
         response = await make_api_request(
             url_path="/api/card",
             payload=card_config
         )
-        print(f"Created card: {response}")
-        break
+        # print(f"Created card - Status: {response.status}")
 
 
 if __name__ == "__main__":

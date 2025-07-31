@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import httpx
 import os
-from enum import Enum
+from migrations.base import QueryType
 
 load_dotenv()
 
@@ -36,47 +36,38 @@ async def make_api_request(url_path: str, payload: dict = None) -> dict:
         return response.json()
 
 
-class BiTool(Enum):
-    REDASH = 'redash'
-    LOOKER = 'looker'
-    TABLEAU = 'tableau'
 
 
-class QueryType(Enum):
-    SQL = 'native'
-    MBQL = 'query'
+# def get_query_config(db_id: int, query_type: QueryType = 'native', sql: str = None, mbql: dict = None, 
+#                      viz_settings: dict = {}, parameters: list = [], template_tags: dict = {},
+#                      name: str='', description: str='', collection_id: int = 1) -> dict:
+#     """
+#     Get the query configuration for SQL/MBQL.
+#     Args:
+#         db_id (int): The ID of the database to run the query on.
+#         sql (str): The SQL query to run.
+#     Returns:
+#         dict: The query configuration.
+#     """
+#     if query_type == QueryType.SQL:
+#         assert sql is not None, "sql should be provided when query type is sql"
+#     elif query_type == QueryType.MBQL:
+#         assert mbql is not None, "mbql should be provided when query type is mbql"
 
-
-def get_query_config(db_id: int, query_type: QueryType = 'native', sql: str = None, mbql: dict = None, 
-                     viz_settings: dict = {}, parameters: list = [], template_tags: dict = {},
-                     name: str='', description: str='', collection_id: int = 1) -> dict:
-    """
-    Get the query configuration for SQL/MBQL.
-    Args:
-        db_id (int): The ID of the database to run the query on.
-        sql (str): The SQL query to run.
-    Returns:
-        dict: The query configuration.
-    """
-    if query_type == QueryType.SQL:
-        assert sql is not None, "sql should be provided when query type is sql"
-    elif query_type == QueryType.MBQL:
-        assert mbql is not None, "mbql should be provided when query type is mbql"
-
-    return {
-        "dataset_query": {
-            "database": db_id,
-            "type": "native",
-            QueryType.SQL.value: {
-                QueryType.SQL.value: sql,
-                "template-tags": template_tags
-            }
-        },
-        "display": "table",
-        "parameters": parameters,
-        "visualization_settings": viz_settings,
-        "type": "question",
-        "name": name,
-        "description": description,
-        "collection_id": collection_id
-    }
+#     return {
+#         "dataset_query": {
+#             "database": db_id,
+#             "type": "native",
+#             QueryType.SQL.value: {
+#                 QueryType.SQL.value: sql,
+#                 "template-tags": template_tags
+#             }
+#         },
+#         "display": "table",
+#         "parameters": parameters,
+#         "visualization_settings": viz_settings,
+#         "type": "question",
+#         "name": name,
+#         "description": description,
+#         "collection_id": collection_id
+#     }
