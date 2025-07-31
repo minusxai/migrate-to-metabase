@@ -21,6 +21,10 @@ METABASE_API_KEY=your_api_key
 METABASE_URL=https://your-metabase.com
 ```
 
+## Downloading data
+This depends on the BI tool you're migrating from. For redash, all queries can be obtained from `/api/queries/<id>`. So the `queries.json` is a list of all the json responses. I'll make a script for this too.
+
+
 ## Usage
 
 ```bash
