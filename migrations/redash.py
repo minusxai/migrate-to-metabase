@@ -2,6 +2,7 @@
 
 from typing import Dict, Any, List
 from .base import BaseMigration, QueryType
+import re
 
 
 class RedashMigration(BaseMigration):
@@ -14,6 +15,9 @@ class RedashMigration(BaseMigration):
         viz_settings = self.extract_viz_settings(redash_query)
         parameters = self.extract_parameters(redash_query)
         template_tags = self.extract_template_tags(redash_query, parameters)
+
+        # Replace {{word1.word2}} patterns with {{word1_word2}} in the SQL query
+        sql_query = re.sub(r'\{\{([^}]+)\.([^}]+)\}\}', r'{{\1_\2}}', sql_query)
 
         return {
             "dataset_query": {
