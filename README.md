@@ -4,7 +4,6 @@ Migrate queries from various BI tools to Metabase. Once on Metabase, [MinusX](ht
 
 ## Supported Tools
 - ✅ Redash
-- 🚧 Looker (planned)
 - 🚧 Tableau (planned)
 
 ## Assets Supported
