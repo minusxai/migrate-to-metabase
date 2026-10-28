@@ -1,0 +1,21 @@
+name: Dependency validation
+on:
+  pull_request:
+  push:
+permissions:
+  contents: read
+jobs:
+  offline-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container: python:3.12.16-slim@sha256:962f801b08c870ac2a51b72bf02dae38c9a4162319e5e882ec244e198188d54e
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - name: Install validation tooling
+        run: python -m pip install uv==0.13.5
+      - name: Install locked dependencies
+        run: |
+          uv sync --locked --all-extras --python /usr/local/bin/python
+          uv pip check
+      - name: Validate offline behavior
+        run: uv run --no-project --python .venv/bin/python python tests/offline_validation.py
